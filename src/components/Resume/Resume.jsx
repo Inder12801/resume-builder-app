@@ -26,6 +26,9 @@ import { useReactToPrint } from "react-to-print";
 import { themeColor } from "../../App";
 import ContextAPI from "../../contextAPI/contextAPI";
 import { Twitter } from "@mui/icons-material";
+import ColorizeIcon from "@mui/icons-material/Colorize";
+import { ColorPicker, useColor } from "react-color-palette";
+// import "react-color-palette/lib/css/styles.css";
 
 const sectionHeadingStyle = {
   textAlign: "left",
@@ -96,12 +99,14 @@ const shortenedUsername = shortenLinkedInUrl(fullLinkedInUrl);
 console.log(shortenedUsername); // Output: johndoe
 
 const Resume = forwardRef(({ props, ref }) => {
-  // const { information } = props;
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [pickedColor, setPickedColor] = useColor("hex", "#000");
   const { resumeInformation, sections, colors, activeColor, setActiveColor } =
     useContext(ContextAPI);
   const [columns, setColumns] = useState([[], []]);
   const [source, setSource] = useState();
   const [target, setTarget] = useState();
+  const colorPickerRef = useRef();
 
   // Create a ref to the component that you want to print
   const componentRef = useRef();
@@ -110,6 +115,10 @@ const Resume = forwardRef(({ props, ref }) => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  const toggleColorPicker = () => {
+    setShowColorPicker(!showColorPicker);
+  };
 
   const info = {
     basicInfo: resumeInformation[sections.basicInfo],
@@ -1013,6 +1022,7 @@ const Resume = forwardRef(({ props, ref }) => {
   }, [source]);
 
   useEffect(() => {}, [activeColor]);
+  console.log(colorPickerRef);
 
   return (
     <>
@@ -1025,7 +1035,7 @@ const Resume = forwardRef(({ props, ref }) => {
         width={"100%"}
         margin={"50px 0"}
       >
-        <Stack direction={"row"} spacing={2}>
+        <Stack direction={"row"} spacing={2} position={"relative"}>
           {colors.map((color) => (
             <span
               key={color}
@@ -1042,6 +1052,41 @@ const Resume = forwardRef(({ props, ref }) => {
               }}
             ></span>
           ))}
+
+          <span
+            className="color-picker"
+            onClick={toggleColorPicker}
+            style={{
+              backgroundColor: pickedColor,
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              cursor: "pointer",
+              border: `2px solid ${showColorPicker ? "black" : "transparent"}`,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <ColorizeIcon onClick={() => colorPickerRef.current.click()} />
+            {
+              <input
+                ref={colorPickerRef}
+                type="color"
+                value={pickedColor}
+                onChange={(e) => {
+                  setPickedColor(e.target.value);
+                  setActiveColor(e.target.value);
+                }}
+                style={{
+                  display: "none",
+                  position: "absolute",
+                  right: "0px",
+                  zIndex: 1,
+                }}
+              />
+            }
+          </span>
         </Stack>
         <Button
           variant="contained"
