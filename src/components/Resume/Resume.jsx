@@ -120,6 +120,8 @@ const Resume = forwardRef(({ props, ref }) => {
     setShowColorPicker(!showColorPicker);
   };
 
+  console.log(resumeInformation);
+
   const info = {
     basicInfo: resumeInformation[sections.basicInfo],
     workExp: resumeInformation[sections.workExp],
@@ -802,62 +804,98 @@ const Resume = forwardRef(({ props, ref }) => {
       }}
     >
       <Typography variant="body2" sx={contactLinkStyle}>
-        <AlternateEmailRoundedIcon
-          sx={{
-            color: activeColor,
-          }}
-        />{" "}
-        <Link href="mailto:john@example.com" color="inherit">
-          {info.basicInfo.detail?.email}
-        </Link>
+        {info.basicInfo.detail?.email ? (
+          <>
+            <AlternateEmailRoundedIcon
+              sx={{
+                color: activeColor,
+              }}
+            />{" "}
+            <Link href="mailto:john@example.com" color="inherit">
+              {info.basicInfo.detail?.email}
+            </Link>
+          </>
+        ) : (
+          ""
+        )}
       </Typography>
       <Typography variant="body2" sx={contactLinkStyle}>
-        <LocalPhoneRoundedIcon
-          sx={{
-            color: activeColor,
-          }}
-        />{" "}
-        {info.basicInfo.detail?.phone}
+        {info.basicInfo.detail?.phone ? (
+          <>
+            <LocalPhoneRoundedIcon
+              sx={{
+                color: activeColor,
+              }}
+            />
+            {info.basicInfo.detail?.phone}
+          </>
+        ) : (
+          ""
+        )}
       </Typography>
       <Typography variant="body2" sx={contactLinkStyle}>
-        <LinkedInIcon
-          sx={{
-            color: activeColor,
-          }}
-        />{" "}
-        <Link href={info.basicInfo.detail?.linkedIn} color="inherit">
-          {shortenLinkedInUrl(info.basicInfo.detail?.linkedIn)}
-        </Link>
+        {shortenLinkedInUrl(info.basicInfo.detail?.linkedIn) ? (
+          <>
+            <LinkedInIcon
+              sx={{
+                color: activeColor,
+              }}
+            />{" "}
+            <Link href={info.basicInfo.detail?.linkedIn} color="inherit">
+              {shortenLinkedInUrl(info.basicInfo.detail?.linkedIn)}
+            </Link>
+          </>
+        ) : (
+          ""
+        )}
       </Typography>
       <Typography variant="body2" sx={contactLinkStyle}>
-        <GitHubIcon
-          sx={{
-            color: activeColor,
-          }}
-        />{" "}
-        <Link href={info.basicInfo.detail?.github} color="inherit">
-          {shortenGitHubUrl(info.basicInfo.detail?.github)}
-        </Link>
+        {info.basicInfo.detail?.github ? (
+          <>
+            <GitHubIcon
+              sx={{
+                color: activeColor,
+              }}
+            />{" "}
+            <Link href={info.basicInfo.detail?.github} color="inherit">
+              {shortenGitHubUrl(info.basicInfo.detail?.github)}
+            </Link>
+          </>
+        ) : (
+          ""
+        )}
       </Typography>
       <Typography variant="body2" sx={contactLinkStyle}>
-        <LanguageIcon
-          sx={{
-            color: activeColor,
-          }}
-        />{" "}
-        <Link href={info.basicInfo.detail?.website} color="inherit">
-          {info.basicInfo.detail?.website?.split("//")[1]}
-        </Link>
+        {info.basicInfo.detail?.website ? (
+          <>
+            <LanguageIcon
+              sx={{
+                color: activeColor,
+              }}
+            />{" "}
+            <Link href={info.basicInfo.detail?.website} color="inherit">
+              {info.basicInfo.detail?.website?.split("//")[1]}
+            </Link>
+          </>
+        ) : (
+          ""
+        )}
       </Typography>
       <Typography variant="body2" sx={contactLinkStyle}>
-        <Twitter
-          sx={{
-            color: activeColor,
-          }}
-        />{" "}
-        <Link href={info.basicInfo.detail?.twitter} color="inherit">
-          {info.basicInfo.detail?.twitter?.split("//")[1]}
-        </Link>
+        {info.basicInfo.detail?.twitter ? (
+          <>
+            <Twitter
+              sx={{
+                color: activeColor,
+              }}
+            />{" "}
+            <Link href={info.basicInfo.detail?.twitter} color="inherit">
+              {info.basicInfo.detail?.twitter?.split("//")[1]}
+            </Link>
+          </>
+        ) : (
+          ""
+        )}
       </Typography>
     </div>
   );

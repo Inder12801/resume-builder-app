@@ -63,19 +63,6 @@ const WorkExperienceForm = ({ Chip, activeSectionKey }) => {
   };
 
   const handleSubmit = () => {
-    // Here you can perform actions with the gathered data
-    // console.log("Submitted data:", formData);
-    // console.log(resumeInformation[sections.workExp]?.details);
-    // const data = {
-    //   id: sections[activeSectionKey],
-    //   sectionTitle: "",
-    //   details: resumeInformation[sections.workExp]?.details?.push(formData),
-    // };
-    // setResumeInformation({
-    //   ...resumeInformation,
-    //   [sections[activeSectionKey]]: data,
-    // });
-    // console.log(resumeInformation);
     if (resumeInformation[sections.workExp]?.details[activeChipIndex]) {
       let data = resumeInformation[sections.workExp];
       data.details[activeChipIndex] = formData;
@@ -84,7 +71,6 @@ const WorkExperienceForm = ({ Chip, activeSectionKey }) => {
         [sections[activeSectionKey]]: data,
       });
     } else {
-      // resumeInformation[sections.education]?.details.push(formData);
       const data = {
         id: sections[activeSectionKey],
         sectionTitle: sections[activeSectionKey],

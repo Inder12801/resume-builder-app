@@ -17,7 +17,6 @@ const sections = {
   achievements: "Achievements",
   hobbies: "Hobbies",
   summary: "Summary",
-  // others: "Others",
 };
 
 const dummyData = {
@@ -33,6 +32,7 @@ const dummyData = {
 };
 
 function App() {
+  const STORAGE_KEY = "resumeInformation";
   const colors = ["#239ce2", "#48bb78", "#0bc5ea", "#a0aec0", "#ed8936"];
   const [resumeInformation, setResumeInformation] = useState({
     [sections.basicInfo]: {
@@ -43,7 +43,7 @@ function App() {
     [sections.workExp]: {
       id: sections.workExp,
       sectionTitle: "",
-      details: [dummyData],
+      details: [],
     },
     [sections.projects]: {
       id: sections.projects,
@@ -97,6 +97,7 @@ function App() {
     colors,
     activeColor,
     setActiveColor,
+    STORAGE_KEY,
   };
 
   return (

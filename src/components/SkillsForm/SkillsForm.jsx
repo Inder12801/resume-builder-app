@@ -4,12 +4,28 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ContextAPI from "../../contextAPI/contextAPI";
 
 const SkillsForm = ({ activeSectionKey }) => {
-  const { sections, resumeInformation, setResumeInformation } =
+  const { sections, resumeInformation, setResumeInformation, STORAGE_KEY } =
     useContext(ContextAPI);
-  const [formData, setFormData] = useState({
-    title: "",
-    points: [],
-  });
+  //get skills from local data
+
+  const [formData, setFormData] = useState(
+    resumeInformation[sections.skills]?.points?.length || {
+      title: "",
+      points: [],
+    }
+  );
+
+  const saveData = () => {
+    const updatedData = {
+      ...resumeInformation[sections.skills],
+      points: formData.points,
+    };
+
+    setResumeInformation({
+      ...resumeInformation,
+      [sections.skills]: updatedData,
+    });
+  };
 
   const handleAddSkill = () => {
     setFormData({ ...formData, points: [...formData.points, ""] });
@@ -32,23 +48,31 @@ const SkillsForm = ({ activeSectionKey }) => {
 
     const updatedData = {
       ...resumeInformation[sections.skills],
-      points: formData.points,
+      points: [...formData.points],
     };
 
     setResumeInformation({
       ...resumeInformation,
       [sections.skills]: updatedData,
     });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeInformation));
   };
 
   // useEffect(() => {
-  //   setFormData(
-  //     resumeInformation[sections.skills]?.points?.length || {
-  //       title: "",
-  //       points: [],
-  //     }
-  //   );
-  //   return function cleanup() {};
+  //   if (resumeInformation[sections.skills]?.points?.length <= 0) return null;
+  //   const localData = JSON.parse(localStorage.getItem(STORAGE_KEY))
+  //     ? JSON.parse(localStorage.getItem(STORAGE_KEY))[sections.skills]
+  //     : {
+  //         title: "",
+  //         points: [],
+  //       };
+  //   // setFormData(
+  //   //   resumeInformation[sections.skills]?.points?.length || {
+  //   //     title: "",
+  //   //     points: [],
+  //   //   }
+  //   // );
+  //   setFormData(...localData);
   // }, [resumeInformation]);
 
   return (

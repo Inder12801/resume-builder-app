@@ -13,8 +13,16 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
     activeChipIndex,
     setActiveChipIndex,
   } = useContext(ContextAPI);
+
+  const localData = JSON.parse(localStorage.getItem(sections.projects)) || {
+    projectName: "",
+    link: "",
+    startDate: "",
+    endDate: "",
+    projectPoints: [],
+  };
   const [formData, setFormData] = useState(
-    resumeInformation[sections.projects]?.details[activeChipIndex] || {
+    JSON.parse(localStorage.getItem(sections.projects)) || {
       projectName: "",
       link: "",
       startDate: "",
@@ -48,11 +56,7 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
   };
 
   const handleSubmit = () => {
-    if (
-      !formData.projectName ||
-      !formData.link ||
-      formData.projectPoints.some((point) => point.trim() === "")
-    ) {
+    if (!formData.projectName) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -75,19 +79,30 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
         [sections[activeSectionKey]]: data,
       });
     }
+    // store the projects into localstoreage
+    localStorage.setItem(sections.projects, JSON.stringify(formData));
   };
 
   useEffect(() => {
-    setFormData(
-      resumeInformation[sections.projects]?.details[activeChipIndex] || {
-        projectName: "",
-        link: "",
-        startDate: "",
-        endDate: "",
-        projectPoints: [],
-      }
-    );
-    return function cleanup() {};
+    // write a code to get the data from localstorage and put it in resumeInfromation
+    const localData = JSON.parse(localStorage.getItem(sections.projects)) || {
+      projectName: "",
+      link: "",
+      startDate: "",
+      endDate: "",
+      projectPoints: [],
+    };
+    setResumeInformation({
+      ...resumeInformation,
+      [sections.projects]: {
+        id: sections.projects,
+        sectionTitle: "",
+        details: [localData],
+      },
+    });
+    setFormData({
+      ...resumeInformation[sections.projects]?.details[activeChipIndex],
+    });
   }, [activeChipIndex]);
 
   return (
@@ -104,7 +119,7 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
         label="Project Name"
         variant="outlined"
         fullWidth
-        value={formData.projectName}
+        value={formData.projectName || ""}
         onChange={(e) =>
           setFormData({ ...formData, projectName: e.target.value })
         }
@@ -113,7 +128,7 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
         label="Link"
         variant="outlined"
         fullWidth
-        value={formData.link}
+        value={formData.link || ""}
         onChange={(e) => setFormData({ ...formData, link: e.target.value })}
       />
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -122,7 +137,7 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
           variant="outlined"
           type="date"
           fullWidth
-          value={formData.startDate}
+          value={formData.startDate || ""}
           onChange={(e) =>
             setFormData({ ...formData, startDate: e.target.value })
           }
@@ -135,7 +150,7 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
           variant="outlined"
           type="date"
           fullWidth
-          value={formData.endDate}
+          value={formData.endDate || ""}
           onChange={(e) =>
             setFormData({ ...formData, endDate: e.target.value })
           }
@@ -150,7 +165,7 @@ const ProjectForm = ({ Chip, activeSectionKey }) => {
             label={`Project Point ${index + 1}`}
             variant="outlined"
             fullWidth
-            value={point}
+            value={point || ""}
             onChange={(e) => handleProjectPointChange(index, e.target.value)}
           />
           <IconButton

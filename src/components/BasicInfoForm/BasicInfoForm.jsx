@@ -1,35 +1,41 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { TextField, Stack, Button, InputAdornment } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LanguageIcon from "@mui/icons-material/Language";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import AlternateEmailRoundedIcon from "@mui/icons-material/AlternateEmailRounded";
+import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import WorkIcon from "@mui/icons-material/Work";
 import { themeColor } from "../../App";
 import ContextAPI from "../../contextAPI/contextAPI";
 
 const BasicInfoForm = () => {
-  const { resumeInformation, setResumeInformation, sections } =
+  const { resumeInformation, setResumeInformation, sections, STORAGE_KEY } =
     useContext(ContextAPI);
   // form data taken from localstorage
-  const localData = JSON.parse(localStorage.getItem(sections.basicInfo)) || {
-    jobTitle: "",
-    name: "",
-    email: "",
-    countryCode: "",
-    phone: "",
-    linkedIn: "",
-    github: "",
-    website: "",
-    twitter: "",
-  };
-  console.log(localData);
+  const localData = JSON.parse(localStorage.getItem(sections.projects))
+    ? JSON.parse(localStorage.getItem(sections.projects))[sections?.basicInfo]
+        ?.detail
+    : {
+        jobTitle: "",
+        name: "",
+        email: "",
+        countryCode: "",
+        phone: "",
+        linkedIn: "",
+        github: "",
+        website: "",
+        twitter: "",
+      };
+  console.log(
+    "localstoragae data : ",
+    JSON.parse(localStorage.getItem(STORAGE_KEY))
+  );
 
   const [formData, setFormData] = useState({ ...localData });
 
-  const handleSubmit = (e) => {
-    // Here you can perform actions with the gathered data
-    // e.preventDefault();
+  const saveData = () => {
     const data = {
       id: sections.basicInfo,
       sectionTitle: "",
@@ -40,10 +46,33 @@ const BasicInfoForm = () => {
       [sections.basicInfo]: data,
     });
     //save into the localstorage
-    localStorage.setItem(sections.basicInfo, JSON.stringify(formData));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeInformation));
+  };
 
+  const handleSubmit = (e) => {
+    saveData();
     console.log("Submitted data:", resumeInformation);
   };
+
+  useEffect(() => {
+    if (!resumeInformation[sections?.basicInfo]?.detail) return;
+
+    const localData = JSON.parse(localStorage.getItem(sections.projects))
+      ? JSON.parse(localStorage.getItem(sections.projects))[sections?.basicInfo]
+          ?.detail
+      : {
+          jobTitle: "",
+          name: "",
+          email: "",
+          countryCode: "",
+          phone: "",
+          linkedIn: "",
+          github: "",
+          website: "",
+          twitter: "",
+        };
+    setFormData({ ...localData });
+  }, [resumeInformation]);
 
   return (
     <Stack spacing={2} mt={2}>
@@ -67,21 +96,15 @@ const BasicInfoForm = () => {
         fullWidth
         value={formData.email}
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <AlternateEmailRoundedIcon />
+            </InputAdornment>
+          ),
+        }}
       />
       <Stack direction="row" alignItems="center" spacing={1}>
-        {/* <TextField
-          label="Country Code"
-          variant="outlined"
-          type="number"
-          value={formData.countryCode}
-          onChange={(e) =>
-            setFormData({ ...formData, countryCode: e.target.value })
-          }
-          InputProps={{
-            startAdornment: <InputAdornment position="start">+</InputAdornment>,
-          }}
-          sx={{ width: "120px" }}
-        /> */}
         <TextField
           label="Phone Number"
           variant="outlined"
@@ -89,6 +112,13 @@ const BasicInfoForm = () => {
           fullWidth
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <LocalPhoneRoundedIcon />
+              </InputAdornment>
+            ),
+          }}
         />
       </Stack>
       <TextField
