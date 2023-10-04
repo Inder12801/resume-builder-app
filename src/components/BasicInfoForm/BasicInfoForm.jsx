@@ -14,26 +14,24 @@ const BasicInfoForm = () => {
   const { resumeInformation, setResumeInformation, sections, STORAGE_KEY } =
     useContext(ContextAPI);
   // form data taken from localstorage
-  const localData = JSON.parse(localStorage.getItem(sections.projects))
-    ? JSON.parse(localStorage.getItem(sections.projects))[sections?.basicInfo]
-        ?.detail
-    : {
-        jobTitle: "",
-        name: "",
-        email: "",
-        countryCode: "",
-        phone: "",
-        linkedIn: "",
-        github: "",
-        website: "",
-        twitter: "",
-      };
   console.log(
     "localstoragae data : ",
     JSON.parse(localStorage.getItem(STORAGE_KEY))
   );
 
-  const [formData, setFormData] = useState({ ...localData });
+  const [formData, setFormData] = useState(
+    resumeInformation[sections?.basicInfo] || {
+      jobTitle: "",
+      name: "",
+      email: "",
+      countryCode: "",
+      phone: "",
+      linkedIn: "",
+      github: "",
+      website: "",
+      twitter: "",
+    }
+  );
 
   const saveData = () => {
     const data = {
@@ -45,33 +43,23 @@ const BasicInfoForm = () => {
       ...resumeInformation,
       [sections.basicInfo]: data,
     });
-    //save into the localstorage
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(resumeInformation));
   };
 
   const handleSubmit = (e) => {
-    saveData();
+    const data = {
+      id: sections.basicInfo,
+      sectionTitle: "",
+      detail: formData,
+    };
+    setResumeInformation({
+      ...resumeInformation,
+      [sections.basicInfo]: data,
+    });
     console.log("Submitted data:", resumeInformation);
   };
 
   useEffect(() => {
-    if (!resumeInformation[sections?.basicInfo]?.detail) return;
-
-    const localData = JSON.parse(localStorage.getItem(sections.projects))
-      ? JSON.parse(localStorage.getItem(sections.projects))[sections?.basicInfo]
-          ?.detail
-      : {
-          jobTitle: "",
-          name: "",
-          email: "",
-          countryCode: "",
-          phone: "",
-          linkedIn: "",
-          github: "",
-          website: "",
-          twitter: "",
-        };
-    setFormData({ ...localData });
+    setFormData(resumeInformation[sections?.basicInfo]);
   }, [resumeInformation]);
 
   return (

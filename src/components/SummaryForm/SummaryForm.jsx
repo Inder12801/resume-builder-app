@@ -11,18 +11,6 @@ const detailForm = () => {
   });
 
   const handleSubmit = () => {
-    // Here you can perform actions with the gathered data
-    // console.log("Submitted data:", formData);
-    // const data = {
-    //   id: sections[activeSectionKey],
-    //   sectionTitle: "",
-    //   details: resumeInformation[sections.education]?.details?.push(formData),
-    // };
-    // setResumeInformation({
-    //   ...resumeInformation,
-    //   [sections[activeSectionKey]]: data,
-    // });
-    // console.log(resumeInformation);
     console.log("Submitted data:", formData);
     // pose check of summary length of 80 words
     if (formData?.detail?.length <= 0) return;

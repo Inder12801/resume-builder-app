@@ -1181,7 +1181,6 @@ const Resume = forwardRef(({ props, ref }) => {
             left={"0"}
             // bottom={"-220px"}
             sx={{ margin: "8px 24px", marginBottom: "16px" }}
-            bgcolor={activeColor}
           >
             {summary}
           </Stack>
